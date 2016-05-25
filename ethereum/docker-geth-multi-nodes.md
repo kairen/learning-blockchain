@@ -2,11 +2,11 @@
 本節將說明如何透過 Docker 部署 Go Ethereum。並利用簡單的指令來進行 Demo。
 
 ### 事前準備
-準備一台 Ubuntu Server 14.04 LTS 主機規格如下：
+準備能夠安裝 Docker 的主機與作業系統，這邊採用 Ubuntu Server 14.04 LTS，主機規格如下：
 
-| RAM         | Disk            | CPUs       |
-|-------------|-----------------|------------|
-| 4 GB 記憶體 | 40 GB 儲存空間  | 兩核處理器 |
+| RAM | Disk |CPUs |
+|-----|------|-----|
+| 4GB | 40GB |2vCPU|
 
 然後安裝 Docker Engine 與相關套件，透過以下指令：
 ```sh
@@ -94,7 +94,7 @@ true
 ```
 > 這邊可以看到 remote 與 local 兩端。
 
-透過 admin.nodeInfo 查看結點資訊：
+透過 admin.nodeInfo 查看節點資訊：
 ```sh
 > admin.nodeInfo
 {

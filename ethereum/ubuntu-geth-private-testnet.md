@@ -1,4 +1,4 @@
-# 部署 Ubuntu Private Testnet
+# Ubuntu Geth Private Testnet
 本節將說明如何透過 Ubuntu 部署 Go Ethereum。並利用簡單的指令來進行 Demo。
 
 ### 事前準備
@@ -20,7 +20,7 @@ $ bash <(curl -L https://install-geth.ethereum.org)
 	"nonce": "0xdeadbeefdeadbeef",
 	"timestamp": "0x0",
 	"parentHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
-	"extraData": "Custem Ethereum Genesis Block",
+	"extraData": "Ethereum Genesis Block",
 	"gasLimit": "0x8000000",
 	"difficulty": "0x400",
 	"mixhash": "0x0000000000000000000000000000000000000000000000000000000000000000",
@@ -61,11 +61,14 @@ at block: 67 (Fri, 20 May 2016 19:49:36 UTC)
 
 當正常進入到 geth console 後，就可以建立第一個 account，並獲取位址：
 ```sh
-> personal.newAccount("kairen");
+> personal.newAccount();
+Passphrase:
+Repeat passphrase:
 "0x80ae1f1579924bedc59953f13140cd6c4918b812"
 ```
+> 要輸入密碼兩次。
 
-接著透過鍵盤輸入```<ctrl-c>```離開，然後執行以下指令刪除 keystore：
+接著透過鍵盤輸入```[Ctrl-D]```離開，然後執行以下指令刪除 keystore：
 ```sh
 $ cd data
 $ rm -rf `ls | grep -v keystore`
@@ -91,42 +94,43 @@ $ rm -rf `ls | grep -v keystore`
 ```
 > 這邊```<Your_Address>```為 0x80ae1f1579924bedc59953f13140cd6c4918b812。
 
-接著再次執行 geth 指令，來透該帳戶存值：
+接著再次執行 geth 指令，來透該賬戶存值：
 ```sh
 $ geth --genesis custom.json --datadir data/ --networkid 123 --nodiscover --maxpeers 0 console
 ```
 
-成功進入後，可以執行查看帳戶資訊：
+成功進入後，可以執行查看賬戶資訊：
 ```sh
 > personal.listAccounts
 ["0x80ae1f1579924bedc59953f13140cd6c4918b812"]
 ```
 
-查看 primary 帳戶的錢包狀態：
+查看 primary 賬戶的錢包狀態：
 ```sh
 > kairen = eth.accounts[0];
 "0x80ae1f1579924bedc59953f13140cd6c4918b812"
 
-> kairen_balance = web3.fromWei(eth.getBalance(kairen), "ether");
+> web3.fromWei(eth.getBalance(kairen), "ether");
 10
 ```
 
-接著就可以進行採礦了，首先設定要開採的帳戶：
+接著就可以進行採礦了，首先設定要開採的賬戶：
 ```sh
 > miner.setEtherbase(kairen)
 true
 ```
 
-當帳戶設定完成後，就可以執行以下指令進行採礦：
+當賬戶設定完成後，就可以執行以下指令進行採礦：
 ```sh
 > miner.start(8)
 true
-> I0520 20:52:23.637262 miner/worker.go:555] commit new work on block 1 with 0 txs & 0 uncles. Took 252.728µs
+
+I0520 20:52:23.637262 miner/worker.go:555] commit new work on block 1 with 0 txs & 0 uncles. Took 252.728µs
 I0520 20:52:23.637480 ethash.go:259] Generating DAG for epoch 0 (size 1073739904) (0000000000000000000000000000000000000000000000000000000000000000)
 ...
 ```
 
-若要停止採礦可以輸入以下指令：
+若要停止採礦可以按一次 Enter 直接輸入以下指令：
 ```sh
 > miner.stop()
 true
@@ -134,14 +138,14 @@ I0520 20:53:26.935445 miner/worker.go:337] 🔨  Mined stale block (#5 / fba716e
 I0520 20:53:26.938490 miner/worker.go:337] 🔨  Mined stale block (#6 / d82943d3).
 ```
 
-經過一段時間後，我們可以在查看一下帳戶：
+經過一段時間後，我們可以在查看一下賬戶：
 ```sh
-> kairen_balance
+> web3.fromWei(eth.getBalance(kairen), "ether");
 102.34375
 ```
 > 會發現增加了許多。
 
-當成開採區塊後，就可以檢查帳戶的 ether balance 的數值：
+當成開採區塊後，就可以檢查賬戶的 ether balance 的數值：
 ```
 > eth.getBalance(eth.coinbase).toNumber()
 102343750000000000000
@@ -149,14 +153,16 @@ I0520 20:53:26.938490 miner/worker.go:337] 🔨  Mined stale block (#6 / d82943d
 
 ### 進行交易
 Ethereum 有兩種類型的狀態：
-* 一般或外部控制的帳戶
+* 一般或外部控制的賬戶
 * 合約，即表示程式碼片段，可想成是一個類別(class)。
 
-這兩種類型的帳戶都具有 ether balance。
+這兩種類型的賬戶都具有 ether balance。
 
-首先我們先建立另一個帳戶，並查看所有帳戶列表：
+首先我們先建立另一個賬戶，並查看所有賬戶列表：
 ```sh
-> personal.newAccount("pingyu");
+> personal.newAccount();
+Passphrase:
+Repeat passphrase:
 "0x99fa5fcf20495dac5eccebeac33917818236d2db"
 
 > personal.listAccounts
@@ -169,25 +175,26 @@ Ethereum 有兩種類型的狀態：
 > kairen = eth.accounts[0];
 "0x80ae1f1579924bedc59953f13140cd6c4918b812"
 
-> kairen_balance = web3.fromWei(eth.getBalance(kairen), "ether");
+> web3.fromWei(eth.getBalance(kairen), "ether");
 102.34375
 
 > pingyu = eth.accounts[1];
 "0x99fa5fcf20495dac5eccebeac33917818236d2db"
 
-> pingyu_balance = web3.fromWei(eth.getBalance(pingyu), "ether");
+> web3.fromWei(eth.getBalance(pingyu), "ether");
 0
 ```
 
-在移轉之前，首先要解鎖帳戶：
+在移轉之前，首先要解鎖賬戶：
 ```sh
-> personal.unlockAccount(kairen, "kairen")
+> personal.unlockAccount(kairen)
 true
 ```
+> 也可以直接透過以下方式輸入密碼```personal.unlockAccount(kairen, "r00tme")```。
 
-都確認好解鎖帳戶後，就可以進行 Ether 移轉，透過以下方式進行移轉：
+都確認好解鎖賬戶後，就可以進行 Ether 移轉，透過以下方式進行移轉：
 ```sh
-> eth.sendTransaction({from: kairen, to: pingyu, value: web3.toWei(1, "ether")})
+> eth.sendTransaction({from: kairen, to: pingyu, value: web3.toWei(100, "ether")})
 I0520 21:17:20.950180 eth/api.go:1180] Tx(0x1712f84c3c22a356620f93410699f8b656098bfa6ffc3a3299ef1f57a0c5d681) to: 0x99fa5fcf20495dac5eccebeac33917818236d2db
 "0x1712f84c3c22a356620f93410699f8b656098bfa6ffc3a3299ef1f57a0c5d681"
 ```
@@ -203,7 +210,7 @@ I0520 21:17:20.950180 eth/api.go:1180] Tx(0x1712f84c3c22a356620f93410699f8b65609
 > eth.getBlock("pending", true).transactions
 [{
     blockHash: "0x1748c022911bfff7e71b0bc7191abc3068531f5a9d57eb6031608f4ff84d1e0b",
-    blockNumber: 1,
+    blockNumber: 40,
     from: "0xbe33553d18ba9d5aa477246bebb6fd05d6834793",
     gas: 90000,
     gasPrice: 21781760000,
@@ -212,17 +219,60 @@ I0520 21:17:20.950180 eth/api.go:1180] Tx(0x1712f84c3c22a356620f93410699f8b65609
     nonce: 0,
     to: "0xa1cc1f3f979d33fca8c5543cad1613fd4834e1ef",
     transactionIndex: 0,
-    value: 1000000000000000000
+    value: 10000000000000000000
 }]
 ```
+> 可以看到這筆交易被存在 blockNumber 為 40 的區塊中。
 
+這時候查看 pingyu 的賬戶，會發現依然沒有改變，So sad：
+```sh
+> web3.fromWei(eth.getBalance(pingyu), "ether");
+0
+```
 
-接著透過建立一個 Java Script 函式印出所有帳戶 Balance：
+這是因為該交易區塊沒有任何人協助進行運算驗證，因此狀態會一直處於 pending，這時候只要在執行以下指令即可：
+```sh
+> miner.start(8)
+true
+
+I0525 06:50:47.885729 miner/worker.go:555] commit new work on block 40 with 1 txs & 2 uncles. Took 861.24µs
+I0525 06:50:48.261245 miner/worker.go:337] 🔨  Mined block (#40 / bbaee562). Wait 5 blocks for confirmation
+```
+> 經過一段時間確認交易區塊被開採完畢後，就可以透過```miner.stop()```停止。
+
+再次觀察交易狀態，會發現已經完成交易，可以透過以下指令查詢：
+```sh
+> txpool.status
+{
+  pending: 0,
+  queued: 0
+}
+```
+
+也可以透過 eth web3 的 API 來查找指定區塊的資訊：
+```sh
+> eth.getTransactionFromBlock(40)
+{
+  blockHash: "0xbbaee56226a92a2c99b8981ad102bc29940d5cb4f2949559d269bd618e3930d8",
+  blockNumber: 40,
+  from: "0xbe33553d18ba9d5aa477246bebb6fd05d6834793",
+  gas: 90000,
+  gasPrice: 20000000000,
+  hash: "0x482b043cef3dd612827d722a35e383a7e326277c7df335f889e56ee969813584",
+  input: "0x",
+  nonce: 0,
+  to: "0xa1cc1f3f979d33fca8c5543cad1613fd4834e1ef",
+  transactionIndex: 0,
+  value: 10000000000000000000
+}
+```
+
+接著透過建立一個 Java Script 函式印出所有賬戶 Balance：
 ```javascript
-function checkAllBalances() { 
+function checkAllBalances() {
     var i =0;
     eth.accounts.forEach( function(e){
-        console.log("  eth.accounts["+i+"]: " +  e + " \tbalance: " + web3.fromWei(eth.getBalance(e), "ether") + "ether"); i++;
+        console.log("  eth.accounts["+i+"]: " +  e + " \tbalance: " + web3.fromWei(eth.getBalance(e), " ether") + "ether"); i++;
     })
 };
 ```
@@ -231,6 +281,9 @@ function checkAllBalances() {
 然後透過以下方式呼叫函式：
 ```sh
 > checkAllBalances();
-  eth.accounts[0]: 0x80ae1f1579924bedc59953f13140cd6c4918b812 	balance: 101.34375ether
-  eth.accounts[1]: 0x99fa5fcf20495dac5eccebeac33917818236d2db 	balance: 1ether
+  eth.accounts[0]: 0x80ae1f1579924bedc59953f13140cd6c4918b812 	balance: 101.34375 ether
+  eth.accounts[1]: 0x99fa5fcf20495dac5eccebeac33917818236d2db 	balance: 10 ether
 ```
+
+### 參考連結
+- [JavaScript-Console Guide](https://github.com/ethereum/go-ethereum/wiki/JavaScript-Console)
