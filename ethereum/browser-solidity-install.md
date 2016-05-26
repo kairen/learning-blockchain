@@ -1,5 +1,5 @@
 # Browser Solidity
-Browser Solidity 是一個 Web-based 的 Solidity 編譯器與 IDE。本編將說明如何安裝於 Linux 與 Docker 中。
+Browser Solidity 是一個 Web-based 的 Solidity 編譯器與 IDE。本節將說明如何安裝於 Linux 與 Docker 中。
 
 這邊可以連結官方的 https://ethereum.github.io/browser-solidity 來使用; 該網站會是該專案的最新版本預覽。
 

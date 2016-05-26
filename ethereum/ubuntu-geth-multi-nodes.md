@@ -47,8 +47,12 @@ screen -dmS geth /usr/bin/geth \
             --nodiscover \
             --maxpeers 5 \
             --port 30301 \
+            --rpc --rpcaddr "0.0.0.0" \
+            --rpcport "8545" \
+            --rpcapi "web3,db,net,eth" \
             -verbosity 6
 ```
+> 更多的參數，請參考 [Command-Line-Options](https://github.com/ethereum/go-ethereum/wiki/Command-Line-Options)。
 
 建立完成後，修改執行權限：
 ```sh
@@ -69,7 +73,7 @@ $ geth attach ipc:data/geth.ipc
 ```
 > 也可以透過 HTTP 方式 attach，```geth attach http://localhost:8545```。
 
-> 若要加入 RPC 可以 attach 後，輸入以下 function：
+> 若一開始建立沒有 RPC，但想要加入 RPC 可以 attach 後，輸入以下 function：
 ```sh
 > admin.startRPC("0.0.0.0", 8545, "*", "web3,db,net,eth")
 ```
