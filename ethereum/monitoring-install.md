@@ -30,11 +30,34 @@ $ cd eth-netstats
 安裝相依套件與建置應用程式，並啟動服務：
 ```sh
 $ sudo npm install
+$ sudo npm install -g grunt-cli
+$ grunt
 $ PORT="3000" WS_SECRET="admin" npm start
 ```
 > 接著就可以開啟 [eth-netstats](http://localhost:3000)。
 
 > 在沒有任何 Clinet 節點連上情況下，會是一個空的網頁。
+
+撰寫一個腳本```eth-netstats.sh```放置到背景服務執行：
+```sh
+#!/bin/bash
+# History:
+# 2016/05/22 Kyle Bai Release
+#
+export PORT="3000"
+export WS_SECRET="admin"
+
+echo "Starting private eth-netstats ..."
+screen -dmS netstats /usr/bin/npm start
+```
+
+透過以下方式執行：
+```sh
+$ chmod u+x eth-netstats.sh
+$ ./eth-netstats.sh
+Starting private eth-netstats ...
+```
+> 透過```screen -x netstats```取得當前畫面。
 
 #### Client side
 首先安裝 Browser Solidity 要使用到的相關套件：
@@ -116,10 +139,4 @@ $ docker run -d -p 3000:3000 -e WS_SECRET="admin" \
 > 在沒有任何 Clinet 節點連上情況下，會是一個空的網頁。
 
 #### Docker Client side
-自動建置的映像檔現在可以在 [DockerHub](https://hub.docker.com/r/imaccloud/ethnetintel/) 找到，推薦透過以下指令進行安裝：
-```sh
-$ docker run -d -p 30303:30303 -p 30303:30303/udp -e NAME_PREFIX="geth-1" \
--e WS_SERVER="http://172.17.1.200:3000" -e WS_SECRET="admin" \
--e RPC_HOST="172.17.1.199" -e RPC_HOST="8545" \
---name ethnetintel imaccloud/ethnetintel:0.0.1
-```
+d

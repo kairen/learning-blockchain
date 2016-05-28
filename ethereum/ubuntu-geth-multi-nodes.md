@@ -24,7 +24,7 @@ $ bash <(curl -L https://install-geth.ethereum.org)
     "gasLimit": "0x2FEFD8",
     "difficulty": "0x20000",
     "mixhash": "0x0000000000000000000000000000000000000000000000000000000000000000",
-    "coinbase": "0x3333333333333333333333333333333333333333",
+    "coinbase": "0x01",
     "alloc": {
 
     }
@@ -49,7 +49,8 @@ screen -dmS geth /usr/bin/geth \
             --port 30301 \
             --rpc --rpcaddr "0.0.0.0" \
             --rpcport "8545" \
-            --rpcapi "web3,db,net,eth" \
+            --rpcapi "admin,db,eth,debug,miner,net,shh,txpool,personal,web3" \
+            --rpccorsdomain "*" \
             -verbosity 6
 ```
 > 更多的參數，請參考 [Command-Line-Options](https://github.com/ethereum/go-ethereum/wiki/Command-Line-Options)。
@@ -147,6 +148,7 @@ Repeat passphrase:
 > web3.fromWei(eth.getBalance(kairen), "ether");
 0
 ```
+> P.S. 若要移除帳號，可以刪除```data/keystore```底下的檔案。
 
 接著在```geth-2```透過以下指令建立一個賬戶與查看乙太幣：
 ```sh
