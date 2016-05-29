@@ -17,17 +17,15 @@ $ bash <(curl -L https://install-geth.ethereum.org)
 在每個節點建立一個```private.json```檔案來定義起源區塊(Genesis Block)，內容如下：
 ```
 {
-    "nonce": "0xdeadbeefdeadbeef",
-    "timestamp": "0x0",
-    "parentHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
-    "extraData": "Ethereum Genesis Block",
-    "gasLimit": "0x2FEFD8",
-    "difficulty": "0x20000",
+    "nonce": "0x0000000000000042",
     "mixhash": "0x0000000000000000000000000000000000000000000000000000000000000000",
-    "coinbase": "0x01",
-    "alloc": {
-
-    }
+    "difficulty": "0x4000",
+    "alloc": {},
+    "coinbase": "0x0000000000000000000000000000000000000000",
+    "timestamp": "0x00",
+    "parentHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+    "extraData": "Custem Ethereum Genesis Block",
+    "gasLimit": "0xffffffff"
 }
 ```
 

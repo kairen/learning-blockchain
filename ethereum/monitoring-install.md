@@ -144,6 +144,6 @@ $ docker run -d -p 3000:3000 -e WS_SECRET="admin" \
 $ docker run -d -p 30303:30303 -p 30303:30303/udp -e NAME_PREFIX="geth-1" \
 -e WS_SERVER="http://172.17.1.200:3000" -e WS_SECRET="admin" \
 -e RPC_HOST="172.17.1.199" -e RPC_PORT="8545" \
---name ethnetintel imaccloud/ethnetintel:0.0.1
+--name geth-1 imaccloud/ethnetintel:0.0.1
 ```
 > 記得要開啟 [eth-netstats](https://github.com/imac-cloud/docker-ethstats)，並輸入正確的 ```WS_SECRET```。
