@@ -19,7 +19,7 @@
 * [Openchain](https://www.openchain.org/)
 * [Hyperledger](https://www.hyperledger.org/)
 * [Multichain](http://www.multichain.com/)
-* [GCOIN](http://gcoin.com.tw/learn.html)
+* [GCOIN](http://g-coin.org/learn.html)
 * [Bitcore](https://github.com/bitpay/bitcore)
 * [dnschain](https://github.com/okTurtles/dnschain)
 * [blockstack](http://blockstack.org)
