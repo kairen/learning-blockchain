@@ -17,8 +17,8 @@ $ sudo apt-get install -y make g++ git
 
 接著安裝 node.js 平台，來建置 App：
 ```sh
-$ wget http://files.imaclouds.com/scripts/node_installer.sh && chmod u+x node_installer.sh
-$ ./node_installer.sh 5
+$ curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
+$ sudo apt-get install nodejs
 ```
 
 然後透過 git 將專案抓到 local 端，並進入目錄：
@@ -38,7 +38,7 @@ $ PORT="3000" WS_SECRET="admin" npm start
 
 > 在沒有任何 Clinet 節點連上情況下，會是一個空的網頁。
 
-撰寫一個腳本```eth-netstats.sh```放置到背景服務執行：
+撰寫一個腳本`eth-netstats.sh`放置到背景服務執行：
 ```sh
 #!/bin/bash
 # History:
@@ -57,7 +57,7 @@ $ chmod u+x eth-netstats.sh
 $ ./eth-netstats.sh
 Starting private eth-netstats ...
 ```
-> 透過```screen -x netstats```取得當前畫面。
+> 透過`screen -x netstats`取得當前畫面。
 
 #### Client side
 首先安裝 Browser Solidity 要使用到的相關套件：
@@ -67,8 +67,8 @@ $ sudo apt-get install -y make g++ git
 
 接著安裝 node.js 平台，來建置 App：
 ```sh
-$ wget http://files.imaclouds.com/scripts/node_installer.sh && chmod u+x node_installer.sh
-$ ./node_installer.sh 5
+$ curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
+$ sudo apt-get install nodejs
 ```
 
 然後透過 git 將專案抓到 local 端，並進入目錄：
@@ -82,7 +82,7 @@ $ cd eth-net-intelligence-api
 $ sudo npm install && sudo npm install -g pm2
 ```
 
-編輯```app.json```設定檔，並修改以下內容：
+編輯`app.json`設定檔，並修改以下內容：
 ```sh
 [
   {
@@ -106,15 +106,15 @@ $ sudo npm install && sudo npm install -g pm2
   },
 ]
 ```
-> * ```RPC_HOST```為 ethereum 的 rpc ip address。
+> * `RPC_HOST`為 ethereum 的 rpc ip address。
 
-> * ```RPC_PORT```為 ethereum 的 rpc port。
+> * `RPC_PORT`為 ethereum 的 rpc port。
 
-> * ```INSTANCE_NAME```為 ethereum 的監控實例名稱。
+> * `INSTANCE_NAME`為 ethereum 的監控實例名稱。
 
-> * ```WS_SERVER```為 eth-netstats 的 URL。
+> * `WS_SERVER`為 eth-netstats 的 URL。
 
-> * ```WS_SECRET```為 eth-netstats 的 secret。
+> * `WS_SECRET`為 eth-netstats 的 secret。
 
 確認完成後，即可啟動服務：
 ```sh
@@ -129,21 +129,30 @@ $ sudo tail -f $HOME/.pm2/logs/mynode-out-0.log
 - [Docker Client side](#docker-client-side)
 
 #### Docker Monitoring site
-自動建置的映像檔現在可以在 [DockerHub](https://hub.docker.com/r/imaccloud/ethstats/) 找到，建議直接執行以下指令來啟動 eth-netstats 容器：
+自動建置的映像檔現在可以在 [DockerHub](https://hub.docker.com/r/kairen/ethstats/) 找到，建議直接執行以下指令來啟動 eth-netstats 容器：
 ```sh
-$ docker run -d -p 3000:3000 -e WS_SECRET="admin" \
---name ethstats imaccloud/ethstats:0.0.1
+$ docker run -d \
+            -p 3000:3000 \
+            -e WS_SECRET="admin" \
+            --name ethstats \
+            kairen/ethstats
 ```
 > 接著就可以開啟 [eth-netstats](http://localhost:3000)。
 
 > 在沒有任何 Clinet 節點連上情況下，會是一個空的網頁。
 
 #### Docker Client side
-自動建置的映像檔現在可以在 [DockerHub](https://hub.docker.com/r/imaccloud/ethnetintel/) 找到，也推薦透過執行以下指令來啟動 eth-netintel 容器：
+自動建置的映像檔現在可以在 [DockerHub](https://hub.docker.com/r/kairen/ethnetintel/) 找到，也推薦透過執行以下指令來啟動 eth-netintel 容器：
 ```sh
-$ docker run -d -p 30303:30303 -p 30303:30303/udp -e NAME_PREFIX="geth-1" \
--e WS_SERVER="http://172.17.1.200:3000" -e WS_SECRET="admin" \
--e RPC_HOST="172.17.1.199" -e RPC_PORT="8545" \
---name geth-1 imaccloud/ethnetintel:0.0.1
+$ docker run -d \
+            -p 30303:30303 \
+            -p 30303:30303/udp \
+            -e NAME_PREFIX="geth-1" \
+            -e WS_SERVER="http://172.17.1.200:3000" \
+            -e WS_SECRET="admin" \
+            -e RPC_HOST="172.17.1.199" \
+            -e RPC_PORT="8545" \
+            --name geth-1 \
+            kairen/ethnetintel
 ```
-> 記得要開啟 [eth-netstats](https://github.com/imac-cloud/docker-ethstats)，並輸入正確的 ```WS_SECRET```。
+> Monitor 與 Client 需要統一`WS_SECRET`。

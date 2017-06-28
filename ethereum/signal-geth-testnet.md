@@ -11,10 +11,12 @@
 ### 安裝 Ethereum
 若要在 Ubuntu 安裝 Ethereum 的話，可以透過以下指令快速安裝：
 ```sh
-$ bash <(curl -L https://install-geth.ethereum.org)  
+$ sudo apt-get install -y software-properties-common
+$ sudo add-apt-repository -y ppa:ethereum/ethereum
+$ sudo apt-get update && sudo apt-get install ethereum
 ```
 
-完成後即可使用```geth```指令，首先我們先建立一個```custom.json```檔案來定義起源區塊(Genesis Block)，內容如下：
+完成後即可使用`geth`指令，首先我們先建立一個`custom.json`檔案來定義起源區塊(Genesis Block)，內容如下：
 ```json
 {
 	"nonce": "0x0000000000000058",
@@ -50,7 +52,8 @@ $ bash <(curl -L https://install-geth.ethereum.org)
 
 上面設定完成後，就可以透過以下指令來建立：
 ```sh
-$ geth --genesis custom.json --datadir data/ --networkid 123 --nodiscover --maxpeers 0 console
+$ geth init --datadir=data/ custom.json
+$ geth --datadir data/ --networkid 123 --nodiscover --maxpeers 0 console
 ...
 instance: Geth/v1.4.3-stable/linux/go1.5.1
 coinbase: 0xf939ee9f8b3da46dc94f49b28bf920809bc1cb46
@@ -96,7 +99,7 @@ $ rm -rf `ls | grep -v keystore`
 
 接著再次執行 geth 指令，來透該賬戶存值：
 ```sh
-$ geth --genesis custom.json --datadir data/ --networkid 123 --nodiscover --maxpeers 0 console
+$ geth --datadir data/ --networkid 123 --nodiscover --maxpeers 0 console
 ```
 
 成功進入後，可以執行查看賬戶資訊：

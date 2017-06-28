@@ -11,10 +11,12 @@
 
 首先在每個節點安裝 Ethereum 最新版本，可以依照官方透過以下方式快速安裝：
 ```sh
-$ bash <(curl -L https://install-geth.ethereum.org)  
+$ sudo apt-get install -y software-properties-common
+$ sudo add-apt-repository -y ppa:ethereum/ethereum
+$ sudo apt-get update && sudo apt-get install ethereum
 ```
 
-在每個節點建立一個```private.json```檔案來定義起源區塊(Genesis Block)，內容如下：
+在每個節點建立一個`private.json`檔案來定義創世區塊(Genesis Block)，內容如下：
 ```
 {
     "nonce": "0x0000000000000042",
@@ -29,7 +31,12 @@ $ bash <(curl -L https://install-geth.ethereum.org)
 }
 ```
 
-在每個節點新增一名稱為```geth-private.sh```的腳本程式，將用於啟動 geth，並放置背景：
+初始化創世區塊：
+```sh
+$ geth init --datadir=data/ private.json
+```
+
+在每個節點新增一名稱為`eth-private.sh`的腳本程式，將用於啟動 geth，並放置背景：
 ```sh
 #!/bin/bash
 # Program:
@@ -39,7 +46,6 @@ $ bash <(curl -L https://install-geth.ethereum.org)
 #
 echo "Starting private geth"
 screen -dmS geth /usr/bin/geth \
-            --genesis private.json \
             --datadir data/ \
             --networkid 123 \
             --nodiscover \
@@ -59,7 +65,7 @@ $ chmod u+x geth-private.sh
 ```
 
 ### 建置 Ethereum 環境
-首先進入到```geth-1```節點透過以下方式來啟動：
+首先進入到`geth-1`節點透過以下方式來啟動：
 ```sh
 $ ./geth-private.sh
 Starting private geth
@@ -87,17 +93,19 @@ $ geth attach ipc:data/geth.ipc
 "enode://e3dd0392a2971c4b0c4c43a01cd682e19f31aaa573c43a9b227685af7ffed5070217392ae5ada278968d5c4bfddd9c93547bcf4592852196a8facbcdad64d257@172.16.1.99:30301?discport=0"
 ```
 
-上面沒問題後，接著進入到```geth-2```節點，然後透過以下指令開啟 console：
+上面沒問題後，接著進入到`geth-2`節點，然後透過以下指令開啟 console：
 ```sh
-$ geth --datadir data/ --genesis private.json \
---networkid 123 --ipcdisable \
---rpc --rpcport 8545 --nodiscover \
---port 30301 --verbosity 6 \
-console
+$ geth init --datadir=data/ private.json
+$ geth --datadir data/ \
+       --networkid 123 \
+       --ipcdisable \
+       --rpc --rpcport 8545 --nodiscover \
+       --port 30301 --verbosity 6 \
+       console
 ```
 > 也可以透過上一個節點的方式將服務放到背景，在 attach。
 
-完成上面指令會直接進入 console，接著透過以下方式來連接```geth-1```：
+完成上面指令會直接進入 console，接著透過以下方式來連接`geth-1`：
 ```sh
 > admin.addPeer("enode://e3dd0392a2971c4b0c4c43a01cd682e19f31aaa573c43a9b227685af7ffed5070217392ae5ada278968d5c4bfddd9c93547bcf4592852196a8facbcdad64d257@172.16.1.99:30301?discport=0")
 true
@@ -131,7 +139,7 @@ I0525 12:57:10.622920 p2p/server.go:467] <-taskdone: wait for dial hist expire (
 ```
 
 ### 驗證服務
-這部分將透過幾個指令與流程來驗證服務，首先在```geth-1```透過 attach 進入，並建立一個賬戶與查看乙太幣：
+這部分將透過幾個指令與流程來驗證服務，首先在`geth-1`透過 attach 進入，並建立一個賬戶與查看乙太幣：
 ```sh
 $ geth attach http://localhost:8545
 
@@ -162,7 +170,7 @@ Repeat passphrase:
 0
 ```
 
-接著回到```geth-1```來賺取一些要交易的乙太幣：
+接著回到`geth-1`來賺取一些要交易的乙太幣：
 ```sh
 > miner.setEtherbase(kairen)
 true

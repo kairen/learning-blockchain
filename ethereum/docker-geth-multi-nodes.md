@@ -10,7 +10,7 @@
 
 然後安裝 Docker Engine 與相關套件，透過以下指令：
 ```sh
-$ curl http://files.imaclouds.com/scripts/docker_install.sh | sh
+$ curl -fsSL "https://get.docker.com/" | sh
 ```
 
 ### 安裝 Ethereum

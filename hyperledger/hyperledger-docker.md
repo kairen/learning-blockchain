@@ -11,7 +11,7 @@
 然後安裝 Docker Engine 與相關套件，透過以下指令：
 ```sh
 $ sudo apt-get install -y python-pip git
-$ curl http://files.imaclouds.com/scripts/docker_install.sh | sh
+$ curl -fsSL "https://get.docker.com/" | sh
 ```
 
 接著安裝 Docker-compose，透過以下指令安裝：

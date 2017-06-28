@@ -11,8 +11,8 @@ $ sudo apt-get install -y apache2 make g++ git
 
 接著安裝 node.js 平台，來建置 App：
 ```sh
-$ wget http://files.imaclouds.com/scripts/node_installer.sh && chmod u+x node_installer.sh
-$ ./node_installer.sh 5
+$ curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
+$ sudo apt-get install nodejs
 ```
 
 然後透過 git 將專案抓到 local 端，並進入目錄：
@@ -36,8 +36,10 @@ $ sudo cp ./* /var/www/html/
 ### Docker 快速安裝
 本節將說明如何透過抓取線上的映像檔來快速執行 Dashboard。只要透過以下指令既可以進行下載映像檔與佈屬：
 ```sh
-$ docker run -d -p 80:80 --name solidity-dash \
-imaccloud/solidity-dash:0.3.2
+$ docker run -d \
+            -p 80:80 \
+            --name solidity \
+            kairen/solidity
 ```
 
 ![](images/snapshot-dash.png)
