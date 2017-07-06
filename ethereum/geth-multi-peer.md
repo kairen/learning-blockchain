@@ -19,15 +19,21 @@ $ sudo apt-get update && sudo apt-get install ethereum
 在每個節點建立一個`private.json`檔案來定義創世區塊(Genesis Block)，內容如下：
 ```
 {
-    "nonce": "0x0000000000000042",
-    "mixhash": "0x0000000000000000000000000000000000000000000000000000000000000000",
-    "difficulty": "0x4000",
-    "alloc": {},
-    "coinbase": "0x0000000000000000000000000000000000000000",
-    "timestamp": "0x00",
-    "parentHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
-    "extraData": "Custem Ethereum Genesis Block",
-    "gasLimit": "0xffffffff"
+	"coinbase" : "0x0000000000000000000000000000000000000000",
+  "difficulty" : "0x40000",
+  "extraData" : "Custem Ethereum Genesis Block",
+  "gasLimit" : "0xffffffff",
+  "nonce" : "0x0000000000000042",
+  "mixhash" : "0x0000000000000000000000000000000000000000000000000000000000000000",
+  "parentHash" : "0x0000000000000000000000000000000000000000000000000000000000000000",
+  "timestamp" : "0x00",
+  "config": {
+		"chainId": 123,
+		"homesteadBlock": 0,
+		"eip155Block": 0,
+		"eip158Block": 0
+	},
+	"alloc": { }
 }
 ```
 
@@ -51,7 +57,8 @@ screen -dmS geth /usr/bin/geth \
             --nodiscover \
             --maxpeers 5 \
             --port 30301 \
-            --rpc --rpcaddr "0.0.0.0" \
+            --rpc \
+            --rpcaddr "0.0.0.0" \
             --rpcport "8545" \
             --rpcapi "admin,db,eth,debug,miner,net,shh,txpool,personal,web3" \
             --rpccorsdomain "*" \
@@ -98,9 +105,15 @@ $ geth attach ipc:data/geth.ipc
 $ geth init --datadir=data/ private.json
 $ geth --datadir data/ \
        --networkid 123 \
-       --ipcdisable \
-       --rpc --rpcport 8545 --nodiscover \
-       --port 30301 --verbosity 6 \
+       --nodiscover \
+       --maxpeers 5 \
+       --port 30301 \
+       --rpc \
+       --rpcaddr "0.0.0.0" \
+       --rpcport "8545" \
+       --rpcapi "admin,db,eth,debug,miner,net,shh,txpool,personal,web3" \
+      --rpccorsdomain "*" \
+      -verbosity 6 \
        console
 ```
 > 也可以透過上一個節點的方式將服務放到背景，在 attach。

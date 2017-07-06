@@ -19,17 +19,21 @@ $ sudo apt-get update && sudo apt-get install ethereum
 完成後即可使用`geth`指令，首先我們先建立一個`custom.json`檔案來定義起源區塊(Genesis Block)，內容如下：
 ```json
 {
-	"nonce": "0x0000000000000058",
-	"timestamp": "0x0",
-	"parentHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
-	"extraData": "Ethereum Genesis Block",
-	"gasLimit": "0x8000000",
-	"difficulty": "0x000100000",
-	"mixhash": "0x0000000000000000000000000000000000000000000000000000000000000000",
-	"coinbase": "0x0000000000000000000000000000000000000000",
-	"alloc": {
-
-	}
+	"coinbase" : "0x0000000000000000000000000000000000000000",
+  "difficulty" : "0x40000",
+  "extraData" : "",
+  "gasLimit" : "0xffffffff",
+  "nonce" : "0x0000000000000042",
+  "mixhash" : "0x0000000000000000000000000000000000000000000000000000000000000000",
+  "parentHash" : "0x0000000000000000000000000000000000000000000000000000000000000000",
+  "timestamp" : "0x00",
+  "config": {
+		"chainId": 123,
+		"homesteadBlock": 0,
+		"eip155Block": 0,
+		"eip158Block": 0
+	},
+	"alloc": { }
 }
 ```
 > 其中以上 Genesis block 欄位說明如下
