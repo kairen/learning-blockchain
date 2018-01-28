@@ -75,7 +75,7 @@ contract smartSponsor {
   }
 
   // add a new pledge
-  function pledge(bytes32 _message) {
+  function pledge(bytes32 _message) payable {
     if (msg.value == 0 || complete || refunded) throw;
     pledges[numPledges] = Pledge(msg.value, msg.sender, _message);
     numPledges++;
